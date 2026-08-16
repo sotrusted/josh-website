@@ -17,9 +17,10 @@ ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
 # Railway sets RAILWAY_PUBLIC_DOMAIN automatically; add it so the app responds
 import os as _os
-_railway_domain = _os.environ.get('RAILWAY_PUBLIC_DOMAIN')
-if _railway_domain and _railway_domain not in ALLOWED_HOSTS:
-    ALLOWED_HOSTS.append(_railway_domain)
+for _host_var in ('RAILWAY_PUBLIC_DOMAIN', 'RENDER_EXTERNAL_HOSTNAME'):
+    _domain = _os.environ.get(_host_var)
+    if _domain and _domain not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_domain)
 
 CSRF_TRUSTED_ORIGINS = [
     f'https://{h}' for h in ALLOWED_HOSTS if not h.startswith(('localhost', '127.'))
