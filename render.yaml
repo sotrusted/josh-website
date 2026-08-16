@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: josh-website
+    runtime: python
+    buildCommand: pip install uv && uv sync --frozen
+    startCommand: bash start.sh
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: CONTACT_EMAIL
+        value: "contact@joshuashneider.com"
+      - key: EMAIL_BACKEND
+        value: "django.core.mail.backends.console.EmailBackend"
+      - key: PYTHON_VERSION
+        value: "3.12.0"
