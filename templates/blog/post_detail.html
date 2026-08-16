@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-14">
+
+  <header class="mb-10 border-b border-neutral-800 pb-8">
+    <div class="flex items-center gap-3 mb-3">
+      <a href="{{ post.get_list_url }}" class="text-xs text-gold uppercase tracking-widest hover:text-amber-400 transition-colors">
+        {{ post.get_category_display }}
+      </a>
+      <span class="text-neutral-700">·</span>
+      <time class="text-xs text-neutral-600 tracking-wide">{{ post.published_at|date:"F j, Y" }}</time>
+    </div>
+    <h1 class="font-serif text-3xl sm:text-4xl text-neutral-100">{{ post.title }}</h1>
+  </header>
+
+  {% if post.youtube_embed_url %}
+  <div class="mb-10 aspect-video w-full max-w-2xl bg-neutral-900">
+    <iframe src="{{ post.youtube_embed_url }}"
+      title="{{ post.title }}"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen class="w-full h-full border-0"></iframe>
+  </div>
+  {% elif post.image %}
+  <div class="mb-10">
+    <img src="{{ post.image.url }}" alt="{{ post.title }}"
+         class="w-full max-w-2xl object-cover">
+    {% if post.image_caption %}
+    <p class="text-xs text-neutral-600 mt-2">{{ post.image_caption }}</p>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div class="prose-content text-neutral-300 leading-relaxed max-w-2xl">
+    {{ post.content|safe }}
+  </div>
+
+  {% if post.get_tags_list %}
+  <div class="flex flex-wrap gap-2 mt-10 pt-8 border-t border-neutral-800">
+    {% for tag in post.get_tags_list %}
+    <span class="text-xs text-neutral-600 border border-neutral-800 px-2 py-0.5">{{ tag }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="mt-10 pt-8 border-t border-neutral-800">
+    <a href="{{ post.get_list_url }}" class="text-xs text-gold hover:text-amber-400 tracking-wide transition-colors">← Back to {{ post.get_category_display }}</a>
+  </div>
+
+</div>
+{% endblock %}

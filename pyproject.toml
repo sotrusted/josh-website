@@ -1,0 +1,13 @@
+[project]
+name = "josh-website"
+version = "0.1.0"
+description = "Joshua Shneider — composer website"
+requires-python = ">=3.12"
+dependencies = [
+  "django>=6.1,<7",
+  "django-environ>=0.14",
+  "Pillow>=12",
+  "django-tinymce>=5",
+  "whitenoise>=6",
+  "gunicorn>=26",
+]

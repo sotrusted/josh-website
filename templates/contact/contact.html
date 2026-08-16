@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Contact{% endblock %}
+{% block nav_contact %}active{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-14">
+
+  <header class="mb-12 border-b border-neutral-800 pb-8">
+    <h1 class="font-serif text-3xl sm:text-4xl text-neutral-100">Contact</h1>
+    <p class="text-neutral-500 mt-2 text-sm">Get in touch for bookings, commissions, lessons, or anything else.</p>
+  </header>
+
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-14">
+
+    <!-- Contact Form -->
+    <div class="lg:col-span-3">
+      <h2 class="text-xs tracking-widest uppercase text-neutral-500 mb-6">Send a message</h2>
+      <div id="contact-form-container">
+        {% include "partials/contact_form.html" %}
+      </div>
+    </div>
+
+    <!-- Mailing List + Info -->
+    <div class="lg:col-span-2 space-y-10">
+      <div>
+        <h2 class="text-xs tracking-widest uppercase text-neutral-500 mb-6">Mailing list</h2>
+        <p class="text-sm text-neutral-500 mb-5">Stay updated on upcoming shows and new releases.</p>
+        <div id="mailing-list-container">
+          {% include "partials/mailing_list_form.html" %}
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-xs tracking-widest uppercase text-neutral-500 mb-4">Direct</h2>
+        <p class="text-sm text-neutral-400">
+          <a href="mailto:{{ site.contact_email }}" class="text-gold hover:text-amber-400 transition-colors underline">
+            {{ site.contact_email }}
+          </a>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

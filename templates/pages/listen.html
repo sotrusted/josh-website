@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Listen{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-14">
+
+  <header class="mb-10 border-b border-neutral-800 pb-8">
+    <h1 class="font-serif text-3xl sm:text-4xl text-neutral-100 mb-3">Listen</h1>
+    <p class="text-neutral-500 text-sm">
+      Also available on
+      <a href="{{ site.bandcamp_url }}" target="_blank" rel="noopener"
+         class="text-gold hover:text-amber-400 transition-colors underline">Bandcamp ↗</a>
+    </p>
+  </header>
+
+  {% if embeds %}
+  <div class="space-y-12">
+    {% for embed in embeds %}
+    <article>
+      <h2 class="font-serif text-xl text-neutral-100 mb-3">{{ embed.title }}</h2>
+      {% if embed.description %}
+      <p class="text-sm text-neutral-500 mb-4">{{ embed.description }}</p>
+      {% endif %}
+      {% if embed.youtube_embed_url %}
+      <div class="aspect-video w-full max-w-2xl bg-neutral-900">
+        <iframe src="{{ embed.youtube_embed_url }}" title="{{ embed.title }}"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen class="w-full h-full border-0"></iframe>
+      </div>
+      {% elif embed.embed_code %}
+      <div>{{ embed.embed_code|safe }}</div>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-neutral-500">
+    Visit Joshua's
+    <a href="{{ site.bandcamp_url }}" target="_blank" rel="noopener"
+       class="text-gold hover:text-amber-400 underline">Bandcamp page ↗</a>
+    to listen and purchase music.
+  </p>
+  {% endif %}
+
+</div>
+{% endblock %}

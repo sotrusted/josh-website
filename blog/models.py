@@ -1,0 +1,64 @@
+import re
+from django.db import models
+from django.urls import reverse
+from django.utils import timezone
+from tinymce.models import HTMLField
+from core.utils import extract_youtube_id
+
+
+class Post(models.Model):
+    class Category(models.TextChoices):
+        NEWS = 'news', 'News'
+        EVENTS = 'events', 'Events'
+        PRESS = 'press', 'Press'
+
+    title = models.CharField(max_length=300)
+    slug = models.SlugField(unique=True, max_length=300)
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.NEWS)
+    content = HTMLField()
+    excerpt = models.TextField(
+        blank=True,
+        help_text='Short summary shown in list view. Leave blank to auto-generate.',
+    )
+    youtube_url = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text='Optional: paste a YouTube URL to embed a video in the post',
+    )
+    image = models.ImageField(upload_to='blog/', blank=True, null=True)
+    image_caption = models.CharField(max_length=300, blank=True)
+    tags = models.CharField(
+        max_length=300,
+        blank=True,
+        help_text='Comma-separated: jazz, orchestra, recording',
+    )
+    is_published = models.BooleanField(default=True)
+    published_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-published_at']
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'slug': self.slug})
+
+    def get_tags_list(self):
+        return [t.strip() for t in self.tags.split(',') if t.strip()]
+
+    @property
+    def youtube_embed_url(self):
+        vid = extract_youtube_id(self.youtube_url)
+        return f'https://www.youtube.com/embed/{vid}' if vid else ''
+
+    def get_list_url(self):
+        return reverse(self.category)
+
+    def get_excerpt(self):
+        if self.excerpt:
+            return self.excerpt
+        text = re.sub(r'<[^>]+>', '', self.content)
+        return text[:220].rsplit(' ', 1)[0] + '…' if len(text) > 220 else text

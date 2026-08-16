@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6">
+
+  <!-- Hero -->
+  <section class="py-16 sm:py-24 border-b border-neutral-800">
+    <div class="flex flex-col sm:flex-row gap-10 sm:gap-16 items-start">
+      {% if site.hero_image %}
+      <div class="shrink-0">
+        <img src="{{ site.hero_image.url }}" alt="{{ site.site_name }}"
+             class="w-48 sm:w-56 object-cover grayscale">
+      </div>
+      {% endif %}
+      <div>
+        <h1 class="font-serif text-4xl sm:text-5xl text-neutral-100 mb-3 tracking-tight">
+          {{ site.site_name }}
+        </h1>
+        {% if site.tagline %}
+        <p class="text-xs tracking-widest uppercase text-gold mb-8">{{ site.tagline }}</p>
+        {% endif %}
+        <p class="text-neutral-400 leading-relaxed text-lg max-w-xl">{{ site.hero_text }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bandcamp Embeds -->
+  {% if embeds %}
+  <section class="py-12 border-b border-neutral-800">
+    <h2 class="text-xs tracking-widest uppercase text-neutral-500 mb-8">Listen</h2>
+    <div class="space-y-8">
+      {% for embed in embeds %}
+      <div>
+        <p class="font-serif text-lg text-neutral-200 mb-3">{{ embed.title }}</p>
+        {% if embed.description %}
+        <p class="text-sm text-neutral-500 mb-3">{{ embed.description }}</p>
+        {% endif %}
+        {% if embed.youtube_embed_url %}
+        <div class="aspect-video w-full max-w-2xl bg-neutral-900">
+          <iframe src="{{ embed.youtube_embed_url }}" title="{{ embed.title }}"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen class="w-full h-full border-0"></iframe>
+        </div>
+        {% elif embed.embed_code %}
+        <div>{{ embed.embed_code|safe }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Recent News -->
+  {% if recent_posts %}
+  <section class="py-12">
+    <div class="flex items-baseline justify-between mb-8">
+      <h2 class="text-xs tracking-widest uppercase text-neutral-500">Latest News</h2>
+      <a href="{% url 'news' %}" class="text-xs text-gold hover:text-amber-400 transition-colors tracking-wide">All news →</a>
+    </div>
+    <div class="space-y-8">
+      {% for post in recent_posts %}
+      <article class="flex gap-6 items-start border-b border-neutral-800/50 pb-8 last:border-0">
+        {% if post.image %}
+        <a href="{{ post.get_absolute_url }}" class="shrink-0">
+          <img src="{{ post.image.url }}" alt="{{ post.title }}"
+               class="w-24 h-24 object-cover grayscale hover:grayscale-0 transition-all">
+        </a>
+        {% endif %}
+        <div>
+          <p class="text-xs text-neutral-600 mb-1 tracking-wide">{{ post.published_at|date:"F j, Y" }}</p>
+          <h3 class="font-serif text-lg text-neutral-100 mb-2">
+            <a href="{{ post.get_absolute_url }}" class="hover:text-gold transition-colors">{{ post.title }}</a>
+          </h3>
+          <p class="text-sm text-neutral-400 leading-relaxed">{{ post.get_excerpt }}</p>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+</div>
+{% endblock %}

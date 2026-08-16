@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}{{ label }}{% endblock %}
+{% block nav_news %}{% if category == 'news' %}active{% endif %}{% endblock %}
+{% block nav_events %}{% if category == 'events' %}active{% endif %}{% endblock %}
+{% block nav_press %}{% if category == 'press' %}active{% endif %}{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-14">
+
+  <header class="mb-10 border-b border-neutral-800 pb-8">
+    <h1 class="font-serif text-3xl sm:text-4xl text-neutral-100">{{ label }}</h1>
+  </header>
+
+  {% if posts %}
+  <div class="space-y-10">
+    {% for post in posts %}
+    <article class="flex flex-col sm:flex-row gap-6 border-b border-neutral-800/50 pb-10 last:border-0">
+      {% if post.image %}
+      <a href="{{ post.get_absolute_url }}" class="shrink-0">
+        <img src="{{ post.image.url }}" alt="{{ post.title }}"
+             class="w-full sm:w-40 h-40 object-cover grayscale hover:grayscale-0 transition-all">
+      </a>
+      {% endif %}
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <time class="text-xs text-neutral-600 tracking-wide">{{ post.published_at|date:"F j, Y" }}</time>
+          <span class="text-xs text-neutral-700">·</span>
+          <a href="{{ post.get_list_url }}" class="text-xs text-gold uppercase tracking-widest">{{ post.get_category_display }}</a>
+        </div>
+        <h2 class="font-serif text-xl text-neutral-100 mb-3">
+          <a href="{{ post.get_absolute_url }}" class="hover:text-gold transition-colors">{{ post.title }}</a>
+        </h2>
+        <p class="text-sm text-neutral-400 leading-relaxed">{{ post.get_excerpt }}</p>
+        {% if post.get_tags_list %}
+        <div class="flex flex-wrap gap-2 mt-3">
+          {% for tag in post.get_tags_list %}
+          <span class="text-xs text-neutral-600 border border-neutral-800 px-2 py-0.5">{{ tag }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-neutral-500">No {{ label|lower }} yet.</p>
+  {% endif %}
+
+</div>
+{% endblock %}

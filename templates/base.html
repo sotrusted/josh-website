@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ site.site_name }}{% endblock %} — {{ site.site_name }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { gold: '#b8965a' },
+          fontFamily: {
+            serif: ['Georgia', 'Times New Roman', 'serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/htmx.org@2.0.3" defer></script>
+  <style>
+    /* Rich text content from TinyMCE */
+    .prose-content p { margin-bottom: 1.2em; }
+    .prose-content a { color: #b8965a; text-decoration: underline; }
+    .prose-content a:hover { color: #d4af75; }
+    .prose-content ul { list-style: disc; padding-left: 1.5em; margin-bottom: 1em; }
+    .prose-content ol { list-style: decimal; padding-left: 1.5em; margin-bottom: 1em; }
+    .prose-content h2, .prose-content h3 { font-family: Georgia, serif; margin: 1.4em 0 0.5em; }
+    .prose-content img { max-width: 100%; height: auto; margin: 1em 0; }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-neutral-950 text-neutral-200 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="border-b border-neutral-800">
+    <div class="max-w-5xl mx-auto px-6 py-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <a href="{% url 'home' %}" class="font-serif text-2xl tracking-widest uppercase text-neutral-100 hover:text-gold transition-colors">
+          {{ site.site_name }}
+        </a>
+        {% if site.tagline %}
+        <span class="text-xs tracking-widest uppercase text-neutral-500 hidden sm:block">{{ site.tagline }}</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="border-t border-neutral-800/50 overflow-x-auto">
+      <ul class="flex max-w-5xl mx-auto px-6 gap-0 whitespace-nowrap text-xs tracking-widest uppercase">
+        <li><a href="{% url 'home' %}" class="nav-link {% block nav_home %}{% endblock %}">Welcome</a></li>
+        <li><a href="{% url 'page_detail' 'bio' %}" class="nav-link {% block nav_bio %}{% endblock %}">Bio</a></li>
+        <li><a href="{% url 'page_detail' 'orchestra' %}" class="nav-link {% block nav_orchestra %}{% endblock %}">The Love Speaks Orchestra</a></li>
+        <li><a href="{{ site.bandcamp_url }}" target="_blank" rel="noopener" class="nav-link">Listen / Store ↗</a></li>
+        <li><a href="{% url 'video_list' %}" class="nav-link {% block nav_video %}{% endblock %}">Video</a></li>
+        <li><a href="{% url 'news' %}" class="nav-link {% block nav_news %}{% endblock %}">News</a></li>
+        <li><a href="{% url 'page_detail' 'services' %}" class="nav-link {% block nav_services %}{% endblock %}">Services</a></li>
+        <li><a href="{% url 'page_detail' 'lessons' %}" class="nav-link {% block nav_lessons %}{% endblock %}">Lessons</a></li>
+        <li><a href="{% url 'page_detail' 'sheet-music' %}" class="nav-link {% block nav_sheetmusic %}{% endblock %}">Sheet Music</a></li>
+        <li><a href="{% url 'events' %}" class="nav-link {% block nav_events %}{% endblock %}">Calendar</a></li>
+        <li><a href="{% url 'press' %}" class="nav-link {% block nav_press %}{% endblock %}">Press</a></li>
+        <li><a href="{% url 'contact' %}" class="nav-link {% block nav_contact %}{% endblock %}">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="flex-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-neutral-800 mt-16">
+    <div class="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row justify-between items-start gap-4 text-xs text-neutral-500">
+      <span>© {% now "Y" %} {{ site.site_name }}</span>
+      <span>
+        <a href="mailto:{{ site.contact_email }}" class="hover:text-gold transition-colors">{{ site.contact_email }}</a>
+        <span class="mx-2">·</span>
+        <a href="{{ site.bandcamp_url }}" target="_blank" rel="noopener" class="hover:text-gold transition-colors">Bandcamp ↗</a>
+      </span>
+    </div>
+  </footer>
+
+  <!-- Shared Tailwind nav-link style applied via class in <style> -->
+  <style>
+    .nav-link {
+      display: inline-block;
+      padding: 0.6rem 0.75rem;
+      color: #a3a3a3;
+      transition: color 0.15s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #b8965a;
+    }
+  </style>
+
+</body>
+</html>
